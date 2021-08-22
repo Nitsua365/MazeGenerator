@@ -1,4 +1,3 @@
-
 from mazeGenerator import MazeGenerator
 
 def main():

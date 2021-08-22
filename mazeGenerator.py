@@ -2,6 +2,29 @@ from numpy import ndarray
 from random import randint
 import cv2
 
+class MazeNode:
+    def __init__(self, coordinate, index):
+        self.coordinate = coordinate
+        self.index = index
+
+
+    def __eq__(self, other):
+        return self.coordinate[0] == other.coordinate[0] and \
+               self.coordinate[1] == other.coordinate[1]
+
+    def __str__(self):
+        return "coordinate: (x: " + str(self.coordinate[0]) + ", y: " + str(self.coordinate[1]) + ") index: " + str(
+            self.index)
+
+    def __getitem__(self, item):
+        if 2 > item >= 0:
+            return self.coordinate[item]
+        else:
+            assert False
+
+    def __hash__(self):
+        return hash(str(self))
+
 class MazeGenerator:
     def __init__(self, mazeWidth, mazeHeight, wallWidth, nodeDim):
         self.mazeNodeWidth = mazeWidth
@@ -12,6 +35,8 @@ class MazeGenerator:
         self.adjList = []
         self.startLoc = []
         self.endLoc = []
+        self.searchStack = []
+        self.visited = [False for i in range(0, len(self.adjList))]
 
         for i in range(0, len(self.buffer)):
             for j in range(0, len(self.buffer[i])):
@@ -24,16 +49,12 @@ class MazeGenerator:
 
             while nodeHeightCount < self.buffer.shape[1]:
 
-                self.adjList.append([nodeWidthCount, nodeHeightCount])
-
+                self.adjList.append(MazeNode([nodeWidthCount, nodeHeightCount], len(self.adjList)))
 
                 nodeHeightCount += self.nodeDimension + self.wallWidth
 
 
             nodeWidthCount += self.nodeDimension + self.wallWidth
-
-        print(self.buffer.shape)
-        print(self.adjList)
 
         # find start location
         start = end = 0
@@ -49,6 +70,8 @@ class MazeGenerator:
                 break
 
         self.startLoc = self.adjList[randint(start, end)]
+
+        print(str(start) + " " + str(end))
 
         start = end = self.buffer.shape[0] - (self.nodeDimension + self.wallWidth)
 
@@ -69,11 +92,14 @@ class MazeGenerator:
 
 
     def generateMaze(self):
+        self.__DFS(self.startLoc)
+
+
+    def __DFS(self, node):
         print("DFS")
 
 
-    def __DFS(self):
-        print("DFS")
+
 
 
 
