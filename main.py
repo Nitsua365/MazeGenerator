@@ -1,19 +1,17 @@
-import cv2
-from numpy import ndarray
 
+from mazeGenerator import MazeGenerator
 
 def main():
 
-    nodeWidthInput = int(input("enter node width: "))
-    nodeHeightInput = int(input("enter node height: "))
+    mazeNodeWidthInput = int(input("enter node width: "))
+    mazeNodeHeightInput = int(input("enter node height: "))
+    mazeWallWidth = int(input("enter wall width: "))
+    mazeNodeSize = int(input("enter maze node size: "))
+    mazeOutputFileName = input("enter output file name: ")
 
-    buffer = ndarray(shape=(nodeHeightInput, nodeWidthInput, 3), dtype=int)
+    mazeGen = MazeGenerator(mazeNodeWidthInput, mazeNodeHeightInput, mazeWallWidth, mazeNodeSize)
 
-    for i in range(0, len(buffer)):
-        for j in range(0, len(buffer[i])):
-            buffer[i][j] = [0, 0, 0]
-
-    cv2.imwrite("out.png", buffer)
+    mazeGen.writeMaze(mazeOutputFileName)
 
 
 if __name__ == '__main__':
